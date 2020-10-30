@@ -1,0 +1,10 @@
+HEAD
+description
+config
+
+branches/
+hooks/
+info/
+node_modules/
+objects/
+refs/
