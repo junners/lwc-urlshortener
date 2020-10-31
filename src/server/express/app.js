@@ -15,7 +15,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.get('/:slug', (req, res) => {
   console.log('logged hello');
   console.log(JSON.stringify(req.params, null, 2));
-  process(getById(res, req));
+  process(getById(req, res));
   //res.json({ message: 'Hello World!' });
 });
 
