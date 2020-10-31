@@ -13,15 +13,19 @@ const { Sequelize } = require('sequelize');
 //     logging: false
 // })
 
-// console.log(process.env.DATABASE_URL);
+console.log(`database url ${process.env.DATABASE_URL}`);
+// const sequelize = new Sequelize(process.env.DATABASE_URL, {
+//   dialect: 'postgres',
+//   dialectOptions: {
+//     ssl: {
+//       require: true,
+//       rejectUnauthorized: false,
+//     },
+//     keepAlive: true,
+//   },
+// });
 const sequelize = new Sequelize(process.env.DATABASE_URL, {
   dialect: 'postgres',
-  dialectOptions: {
-    ssl: {
-      require: true,
-      rejectUnauthorized: false,
-    },
-  },
 });
 
 const modelDefinitions = [
