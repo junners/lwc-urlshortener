@@ -1,41 +1,29 @@
-const express = require('express');
-const helmet = require('helmet');
-const bodyParser = require('body-parser');
+require('dotenv').config();
 
-const app = express();
-app.use(helmet());
-app.use(bodyParser.json());
+const app = require('./src/server/express/app');
+const sequelize = require('./src/server/sequelize');
 
-const PORT = process.env.PORT || 3000;
+const PORTNUM = process.env.PORT;
 
-// TODO: Make route dictionary
+async function initializeConnection() {
+  console.log('Database connection startup sequence');
+  try {
+    await sequelize.authenticate();
+    console.log('Database connection successful');
+  } catch (error) {
+    console.error('Unable to connect with the database', error.message);
+    process.exit(1);
+  }
+}
 
-// TODO: Separate app and express definition?
+async function initializeApp() {
+  await initializeConnection();
 
-app.get('/:slug', (req, res) => {
-  console.log('logged hello');
-  console.log(JSON.stringify(req.params, null, 2));
-  res.send('Hello World!');
-});
+  console.log(`Starting application server on port ${PORTNUM}`);
 
-app.post('/slugs/', (req, res) => {
-  // respond with sucessful / unsuccessful slugs
-  console.log('logged from slugs');
-  console.log(JSON.stringify(req.body, null, 2));
-  res.send('called slugs');
-});
+  app.listen(PORTNUM, () => {
+    console.log(`Application server started on port ${PORTNUM}`);
+  });
+}
 
-app.patch('/slugs/:slug', (req, res) => {
-  // temporary disabled
-  console.log('logged from patch', JSON.stringify(req.body, null, 2));
-  res.status(500).send('not implemented');
-});
-
-/** handle not supported routes */
-app.use(function (req, res, next) {
-  res.status(404).send("Sorry can't find that!");
-});
-
-app.listen(PORT, () => {
-  console.log(`Example app listening at http://localhost:${PORT}`);
-});
+initializeApp();
